@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import mpmanzan.appexampractico.R;
 
 public class HomeFragment extends Fragment {
@@ -25,6 +29,9 @@ public class HomeFragment extends Fragment {
     private HomeViewModel homeViewModel;
     EditText txtConsulta;
     Button btnBuscar;
+    ListView mListView;
+    private List<ModeloLista> mListaProductos = new ArrayList<>();
+    ListAdapter mListAdapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -36,6 +43,10 @@ public class HomeFragment extends Fragment {
         txtConsulta = (EditText) root.findViewById(R.id.txtbuscar);
         btnBuscar = (Button) root.findViewById(R.id.btnBuscar);
         btnBuscar.setOnClickListener(OnclickBuscar);
+        mListView = (ListView) root.findViewById(R.id.ListVProductos);
+
+
+
 //        final TextView textView = root.findViewById(R.id.text_home);
 //        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
 //            @Override
@@ -54,7 +65,7 @@ public class HomeFragment extends Fragment {
             //Consulta
             classClientHttp clclienteHttp = new classClientHttp(getActivity().getApplicationContext());
             if (!TextUtils.isEmpty(txtConsulta.getText().toString().trim())) {
-                String[] sJson = clclienteHttp.HttpBuscarProducto(txtConsulta.getText().toString().trim(),1,5);
+                String[] sJson = clclienteHttp.HttpBuscarProducto(txtConsulta.getText().toString().trim(), 1, 5);
 
                 //Leer Json
 //        try {
@@ -83,6 +94,12 @@ public class HomeFragment extends Fragment {
 //        } else {
 //            Resp = false;
 //        }
+                mListaProductos.add(new ModeloLista("Computadora Hp", 3900.99, R.mipmap.ic_launcher));
+                mListaProductos.add(new ModeloLista("Laptop Asus", 49000.50, R.mipmap.ic_launcher_round));
+                mListaProductos.add(new ModeloLista("Computadora Acer", 19899.00, R.mipmap.ic_launcher));
+                mListAdapter = new ListAdapter(getActivity().getApplicationContext(), R.layout.item_productos, mListaProductos);
+                mListView.setAdapter(mListAdapter);
+
             }
         }
     };
